@@ -1,5 +1,5 @@
 MicrosoftWebDriver.exe
-dataset
+dataset*/
 *.csv
 
 # Byte-compiled / optimized / DLL files
