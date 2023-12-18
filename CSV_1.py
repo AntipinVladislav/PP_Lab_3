@@ -33,7 +33,5 @@ def createCSV1() -> None:
             file_writer.writerow([f"{p1}", f"{p2}", f"{classtag}"])
 
 
-
-
 if __name__ == "__main__":
     createCSV1()

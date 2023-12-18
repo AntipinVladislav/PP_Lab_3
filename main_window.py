@@ -16,30 +16,44 @@ import csv
 
 
 class MainWindow(QWidget):
+    """Class is used to describe window properties, 2 iterators for cats and dogs count, lists for properly reading csv file
+    Args:
+        QWidget (Window): Main window for the programm
+    """
     datapath = ''
     itercat = CSV_5.MyIterator(1000)
     iterdog = CSV_5.MyIterator(1000)
     listcat = list()
     listdog = list()
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """initializes class
+        """
         super().__init__()
 
         self.initUI()
 
-    def dataset1(self):
+    def dataset1(self) -> None:
+        """creates basic csv file
+        """
         CSV_1.createCSV1()
 
-    def dataset2(self):
+    def dataset2(self) -> None:
+        """creates new dataset folder with copied files from first one, also renames them slightly
+        """
         CSV_2.copy()
         CSV_2.createCSV2()
 
-    def dataset3(self):
+    def dataset3(self) -> None:
+        """creates copies with random numbers and puts them in new csv and folder
+        """
         randlist = CSV_3.randNumberNames()
         CSV_3.copyRand(randlist)
         CSV_3.createCSV3(randlist)
 
-    def nextcat(self):
+    def nextcat(self) -> None:
+        """shows new cat image
+        """
         try:
             self.pixmap = QPixmap(f'{self.listcat[self.itercat.counter]}')
             print(f'{self.listcat[self.itercat.counter]}')
@@ -53,7 +67,9 @@ class MainWindow(QWidget):
             self.pixmap = QPixmap('NECO.png')
             self.label.setPixmap(self.pixmap)
 
-    def nextdog(self):
+    def nextdog(self) -> None:
+        """shows new dog image
+        """
         try:
             self.pixmap = QPixmap(f'{self.listdog[self.iterdog.counter]}')
             print(f'{self.listdog[self.iterdog.counter]}')
@@ -66,7 +82,9 @@ class MainWindow(QWidget):
             self.pixmap = QPixmap('NECO.png')
             self.label.setPixmap(self.pixmap)
 
-    def initUI(self):
+    def initUI(self) -> None:
+        """creates the GUI
+        """
         self.datapath = QFileDialog.getExistingDirectory(self, 'Select Folder')
         with open(f'{self.datapath}.csv', mode="r", encoding='utf-8') as r_file:
             count = 0
