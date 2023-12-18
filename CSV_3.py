@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List
 
 
-def createCSV3(randlist: List[int], datapath) -> None:
+def createCSV3(randlist: List[int]) -> None:
     """creates csv file using randomly generated list from def randNumberNames()
     the algorythm is the same as before but name of the file is chenged to
     "number.jpg" (it was "0001.jpg" and now becomes "just 1.jpg")
@@ -15,28 +15,28 @@ def createCSV3(randlist: List[int], datapath) -> None:
         randlist (List[int]): list of integer
     """
     with open("dataset_random.csv", mode="w", encoding='utf-8') as w_file:
-        file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
+        file_writer = csv.writer(w_file, delimiter=",", lineterminator="\n")
 
         classtag = "Cat"
         for i in range(1000):
 
-            p1 = os.path.abspath(f'{datapath}_random/{randlist[i]}.jpg')
+            p1 = os.path.abspath(f'dataset_random/Cats/{randlist[i]}.jpg')
 
-            p2 = os.path.relpath(f'{datapath}_random/{randlist[i]}.jpg')
+            p2 = os.path.relpath(f'dataset_random/Cats/{randlist[i]}.jpg')
 
-            file_writer.writerow([f"{p1}", f" {p2}", f" {classtag}"])
+            file_writer.writerow([f"{p1}", f"{p2}", f"{classtag}"])
 
         classtag = "Dog"
         for i in range(1000):
 
-            p1 = os.path.abspath(f'{datapath}_random/{randlist[i+1000]}.jpg')
+            p1 = os.path.abspath(f'dataset_random/Dogs/{randlist[i+1000]}.jpg')
 
-            p2 = os.path.relpath(f'{datapath}_random/{randlist[i+1000]}.jpg')
+            p2 = os.path.relpath(f'dataset_random/Dogs/{randlist[i+1000]}.jpg')
 
-            file_writer.writerow([f"{p1}", f" {p2}", f" {classtag}"])
+            file_writer.writerow([f"{p1}", f"{p2}", f"{classtag}"])
 
 
-def copyRand(randlist: List[int], datapath) -> None:
+def copyRand(randlist: List[int]) -> None:
     """Copies pictures from dataset/Cats and dataset/Dogs to dataset/ and changes 
     file names to list elements, which are randomised in def randNumberNames()
 
@@ -44,17 +44,16 @@ def copyRand(randlist: List[int], datapath) -> None:
         randlist (List[int]): List of integer
     """
     classtag = 'Cats'
-    Path(f'{datapath}_random/Cats').mkdir(parents=True, exist_ok=True)
+    Path(f'dataset_random/Cats').mkdir(parents=True, exist_ok=True)
     for i in range(1000):
         shutil.copyfile(
-            f'{datapath}/Cats/{str(i).zfill(4)}.jpg', f'{datapath}_random/Cats/{randlist[i]}.jpg')
-        
+            f'dataset/Cats/{str(i).zfill(4)}.jpg', f'dataset_random/Cats/{randlist[i]}.jpg')
 
     classtag = 'Dogs'
-    Path(f'{datapath}_random/Dogs').mkdir(parents=True, exist_ok=True)
+    Path(f'dataset_random/Dogs').mkdir(parents=True, exist_ok=True)
     for i in range(1000):
         shutil.copyfile(
-            f'{datapath}/Dogs/{str(i).zfill(4)}.jpg', f'{datapath}_random/Dogs/{randlist[i+1000]}.jpg')
+            f'dataset/Dogs/{str(i).zfill(4)}.jpg', f'dataset_random/Dogs/{randlist[i+1000]}.jpg')
 
 
 def randNumberNames() -> List[int]:

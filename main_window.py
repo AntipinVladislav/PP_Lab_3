@@ -14,10 +14,11 @@ from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtGui, QtWidgets
 import csv
 
+
 class MainWindow(QWidget):
     datapath = ''
-    itercat = CSV_5.MyIterator(10)
-    iterdog = CSV_5.MyIterator(10)
+    itercat = CSV_5.MyIterator(1000)
+    iterdog = CSV_5.MyIterator(1000)
     listcat = list()
     listdog = list()
 
@@ -27,63 +28,56 @@ class MainWindow(QWidget):
         self.initUI()
 
     def dataset1(self):
-        CSV_1.createCSV1(self.datapath)
+        CSV_1.createCSV1()
 
     def dataset2(self):
-        CSV_2.copy(self.datapath)
-        CSV_2.createCSV2(self.datapath)
+        CSV_2.copy()
+        CSV_2.createCSV2()
 
     def dataset3(self):
         randlist = CSV_3.randNumberNames()
-        CSV_3.copyRand(randlist, self.datapath)
-        CSV_3.createCSV3(randlist, self.datapath)
+        CSV_3.copyRand(randlist)
+        CSV_3.createCSV3(randlist)
 
     def nextcat(self):
         try:
-            with open(f'{self.datapath}.csv', mode="r", encoding='utf-8') as r_file:
-                file_reader = csv.reader(r_file, delimiter=",", lineterminator="\r")
-                row = file_reader.__str__
-                filename = row[1][1:len(row[1])]
-                print(row[1])
-                print(filename)
+            self.pixmap = QPixmap(f'{self.listcat[self.itercat.counter]}')
+            print(f'{self.listcat[self.itercat.counter]}')
+            self.label.setPixmap(self.pixmap)
+            next(self.itercat)
 
-                self.pixmap = QPixmap(f'{filename}')
-                print(f'{self.datapath}\\Cats\\{filename}')
-                self.label.setPixmap(self.pixmap)
-                self.itercat.__next__
         except StopIteration:
-            QMessageBox.about('No more cats, you will now go to the main picture')
-            self.itercat = CSV_5.MyIterator(10)
+            QMessageBox.information(
+                self, 'CAT', 'No more cats, you will now go to the main picture')
+            self.itercat = CSV_5.MyIterator(1000)
             self.pixmap = QPixmap('NECO.png')
             self.label.setPixmap(self.pixmap)
 
-        
     def nextdog(self):
         try:
-            with open(f'{self.datapath}.csv', mode="r", encoding='utf-8') as r_file:
-                file_reader = csv.reader(r_file, delimiter=",", lineterminator="\r")
-                for row in file_reader:
-                    filename = row[int(self.iterdog.counter)+1000][row[1].rfind('\\')+1:len(row[1])]
-                    break
-            self.pixmap = QPixmap(f'{self.datapath}/{filename}')
+            self.pixmap = QPixmap(f'{self.listdog[self.iterdog.counter]}')
+            print(f'{self.listdog[self.iterdog.counter]}')
             self.label.setPixmap(self.pixmap)
-            self.itercat.__next__
+            next(self.iterdog)
         except StopIteration:
-            QMessageBox.about('No more dogs, you will now go to the main picture')
-            self.itercat = CSV_5.MyIterator(10)
+            QMessageBox.information(
+                self, 'DOG', 'No more dogs, you will now go to the main picture')
+            self.iterdog = CSV_5.MyIterator(1000)
             self.pixmap = QPixmap('NECO.png')
             self.label.setPixmap(self.pixmap)
-
-    
 
     def initUI(self):
         self.datapath = QFileDialog.getExistingDirectory(self, 'Select Folder')
         with open(f'{self.datapath}.csv', mode="r", encoding='utf-8') as r_file:
-                file_reader = csv.reader(r_file, delimiter=",", lineterminator="\r")
-                for row in file_reader:
+            count = 0
+            file_reader = csv.reader(r_file, delimiter=",")
+            for row in file_reader:
+                if count < 1000:
                     self.listcat.append(row[1])
-
-
+                    count += 1
+                else:
+                    self.listdog.append(row[1])
+                    count += 1
 
         qbtn1 = QPushButton('Dataset', self)
         qbtn1.move(20, 320)
@@ -112,10 +106,6 @@ class MainWindow(QWidget):
         self.label.move(50, 20)
         self.label.setScaledContents(True)
         self.label.resize(300, 275)
-
-        print('New neco')
-        self.pixmap = QPixmap('NECO2.jpg')
-        self.label.setPixmap(self.pixmap)
 
         self.setGeometry(200, 200, 400, 400)
         self.move(800, 300)
